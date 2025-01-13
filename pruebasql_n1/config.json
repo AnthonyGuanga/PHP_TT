@@ -1,0 +1,7 @@
+{
+  "DBType": "mysql",
+  "DBName": "Nombre",
+  "Host": "127.0.0.1",
+  "User": "root",
+  "Password": ""
+}
