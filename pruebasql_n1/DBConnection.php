@@ -1,6 +1,5 @@
 <?php
 require_once "DBConnection.php";
-
 $db = new DBConnection("config.json");
 $connection = $db->dbConnect();
 
@@ -37,8 +36,18 @@ class DBConnection {
                 $use_db->execute();
 
                 if ($use_db) {
-                    // Crear tablas
+                    // Crear tablas en el orden correcto
                     $tables = [
+                        // Tabla customer
+                        "CREATE TABLE IF NOT EXISTS customer (
+                            id INT(10) NOT NULL AUTO_INCREMENT,
+                            firstname VARCHAR(255) DEFAULT NULL,
+                            surname VARCHAR(255) DEFAULT NULL,
+                            email VARCHAR(255) DEFAULT NULL,
+                            type ENUM('basic','premium') DEFAULT NULL,
+                            PRIMARY KEY (id)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
+
                         // Tabla book
                         "CREATE TABLE IF NOT EXISTS book (
                             id INT(10) NOT NULL AUTO_INCREMENT,
@@ -50,34 +59,13 @@ class DBConnection {
                             PRIMARY KEY (id)
                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
 
-                        // Tabla borrowed_books
-                        "CREATE TABLE IF NOT EXISTS borrowed_books (
-                            book_id INT(10) NOT NULL,
-                            customer_id INT(10) NOT NULL,
-                            start DATETIME NOT NULL,
-                            end DATETIME DEFAULT NULL,
-                            PRIMARY KEY (book_id, customer_id, start),
-                            FOREIGN KEY (book_id) REFERENCES book(id),
-                            FOREIGN KEY (customer_id) REFERENCES customer(id)
-                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
-
-                        // Tabla customer
-                        "CREATE TABLE IF NOT EXISTS customer (
-                            id INT(10) NOT NULL AUTO_INCREMENT,
-                            firstname VARCHAR(255) DEFAULT NULL,
-                            surname VARCHAR(255) DEFAULT NULL,
-                            email VARCHAR(255) DEFAULT NULL,
-                            type ENUM('basic','premium') DEFAULT NULL,
-                            PRIMARY KEY (id)
-                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
-
                         // Tabla sale
                         "CREATE TABLE IF NOT EXISTS sale (
                             id INT(10) NOT NULL AUTO_INCREMENT,
                             customer_id INT(10) DEFAULT NULL,
                             date DATETIME DEFAULT NULL,
                             PRIMARY KEY (id),
-                            FOREIGN KEY (customer_id) REFERENCES customer(id)
+                            FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE
                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
 
                         // Tabla sale_book
@@ -86,8 +74,19 @@ class DBConnection {
                             sale_id INT(10) NOT NULL,
                             amount SMALLINT(5) DEFAULT NULL,
                             PRIMARY KEY (book_id, sale_id),
-                            FOREIGN KEY (book_id) REFERENCES book(id),
-                            FOREIGN KEY (sale_id) REFERENCES sale(id)
+                            FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE,
+                            FOREIGN KEY (sale_id) REFERENCES sale(id) ON DELETE CASCADE
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
+
+                        // Tabla borrowed_books
+                        "CREATE TABLE IF NOT EXISTS borrowed_books (
+                            book_id INT(10) NOT NULL,
+                            customer_id INT(10) NOT NULL,
+                            start DATETIME NOT NULL,
+                            end DATETIME DEFAULT NULL,
+                            PRIMARY KEY (book_id, customer_id, start),
+                            FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE,
+                            FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE
                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
                     ];
 
