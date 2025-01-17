@@ -12,5 +12,7 @@ $db->insertData("book",[
 "isbn"=> 978-3-16-1484,
 "title"=> "Harry Potter y la piedra filosofal",
 "author"=> "J. K. Rowling",
-"stock"=> 5, 15.99
+"stock"=> 5, 
+"price"=> 15.99
 ]);
+

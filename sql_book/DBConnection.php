@@ -2,7 +2,7 @@
 
 class DBConnection {
   private $host = "localhost";
-  private $db_name = "mi_base_datos";
+  private $db_name = "libro";
   private $username = "root";
   private $password = "";
   private $conn;
