@@ -3,7 +3,7 @@
 require_once "DBConnection.php";
 require_once "customer.php";
 $db = new DBConnection();
-
+$con = new Customer();
 $connection = $db->getConnection();
 
 $db->createTablas();
@@ -19,11 +19,12 @@ $db->insertData("book",[
 
 
 $email = "anthony@gmail.com";
-if($db->userExsiste($email)){
-    echo "El usuario $email existe";
-}else{  
-    echo "El usuario $email NO existe";
+if($con->userExiste($email)){
+    echo "El usuario existe";
 }
+    else{
+    echo "El usuario no existe";
+    }
 
 echo "<h1>Menu de usuarios</h1>";
 echo <<< eot
