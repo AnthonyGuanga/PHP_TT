@@ -16,18 +16,20 @@ class customer{
         $this->type = $type;
     }
 
-    //Conprobar si el usuario existe en la base de datos
-    public function userExiste($email){
+    //Conprobar si el usuario existe en la base de datos 
+    public function userExiste($firstname){
           
                 $connObj = new DBConnection();
                 $conn = $connObj->getConnection();
-                $sql = "SELECT * FROM customer WHERE email = :email";
+                $sql = "SELECT * FROM customer WHERE firstname = :firstname";
                 $stmt = $conn->prepare($sql);
     
-                $stmt->execute(['email' => $email]);
+                $stmt->execute(['firstname' => $firstname]);
+                //var_dump($stmt);
                 $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-
-               return new self($customer["id"], $customer["firstname"], $customer["surname"], $customer["email"], $customer["type"]);
-           
-    }
+                //var_dump($customer);
+                if($customer){
+                    return true;
+                }   
+}
 }
