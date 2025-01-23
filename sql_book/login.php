@@ -10,10 +10,14 @@ echo <<< eot
     <input type="submit" value="Premium" name="premium"><input type="submit" value="Basic" name="basic">
 </form>
 eot;
+
     $nombre = $_POST['nombre'];
-    if($customer->userExiste($nombre)){
+    $contrasenia = $_POST['contrasenia'];
+    if($customer->userExiste($nombre,$contrasenia)){
         echo "El usuario existe";
     }else{
         echo "El usuario no existe";
-    }
+    } 
+
+   
 ?>

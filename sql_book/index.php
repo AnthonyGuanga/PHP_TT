@@ -13,7 +13,8 @@ $db->insertData("customer",[
 "firstname"=> "anthony",
 "surname"=> "cristhian",
 "email"=> "ninfrad@gmail.com",
-"type"=> "premium"
+"type"=> "premium",
+"password"=> "1234"
 ]);
 
 /* 

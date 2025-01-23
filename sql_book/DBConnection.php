@@ -50,6 +50,7 @@ class DBConnection {
         `firstname` varchar(255) DEFAULT NULL,
         `surname` varchar(255) DEFAULT NULL,
         `email` varchar(255) DEFAULT NULL,
+        `password` varchar(255) DEFAULT NULL,
         `type` enum('basic','premium') DEFAULT NULL,
         PRIMARY KEY (`id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -78,7 +79,7 @@ class DBConnection {
           $this->conn->exec($sql);
           echo "Tabla'$tableName' creando o ya existe.<br>";
         }catch(PDOException $exception){
-          echo "Erro al crear la tabla'$tableName':".$exception->getMessage()."<br>";
+          echo "Error al crear la tabla'$tableName':".$exception->getMessage()."<br>";
         }
       }
       }else{
