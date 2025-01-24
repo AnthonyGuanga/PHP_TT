@@ -34,8 +34,10 @@ class customer{
 
                 //var_dump($customer);
                 if($customer){
+                    var_dump($customer);
                     return true;
                 }
                 
 }
+   
 }

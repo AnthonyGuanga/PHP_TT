@@ -17,6 +17,7 @@ eot;
         echo "El usuario existe";
     }else{
         echo "El usuario no existe";
+        header("Refresh:5, url=registre.php");
     } 
 
    
