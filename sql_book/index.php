@@ -8,14 +8,16 @@ $connection = $db->getConnection();
 
 $db->createTablas();
 
-$db->insertData("customer",[
-"id"=> 1,
-"firstname"=> "anthony",
-"surname"=> "cristhian",
-"email"=> "ninfrad@gmail.com",
-"type"=> "premium",
-"password"=> "1234"
-]);
+// ctl k + c Para documentar el codigo
+
+// $db->insertData("customer",[
+// "id"=> 1,
+// "firstname"=> "anthony",
+// "surname"=> "cristhian",
+// "email"=> "ninfrad@gmail.com",
+// "type"=> "premium",
+// "password"=> "1234"
+// ]);
 
 /* 
 $email = 1;
