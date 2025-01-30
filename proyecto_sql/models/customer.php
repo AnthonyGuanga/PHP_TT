@@ -1,23 +1,109 @@
 <?php
-// models/customer.php
 class Customer {
     private $conn;
+    private $table = 'customer';
 
-    public function __construct($conn) {
-        $this->conn = $conn;
+    public $id;
+    public $firstname;
+    public $surname;
+    public $email;
+    public $type;
+    public $password;
+
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+    public function login() {
+    
+        $query = "SELECT id, type FROM " . $this->table_name . " WHERE email = ? AND password = ?";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(1, $this->email);
+
+        $stmt->bindParam(2, $this->password);
+
+        $stmt->execute();
+
+
+
+        if($stmt->rowCount() == 1) {
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $this->id = $row['id'];
+
+            $this->type = $row['type'];
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+    // Crear un cliente
+    public function create() {
+        $query = "INSERT INTO " . $this->table . " 
+                  SET firstname = :firstname, surname = :surname, 
+                      email = :email, type = :type, password = :password";
+        
+        $stmt = $this->conn->prepare($query);
+
+        $this->password = md5($this->password); // Encriptar contraseña
+
+        $stmt->bindParam(':firstname', $this->firstname);
+        $stmt->bindParam(':surname', $this->surname);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':type', $this->type);
+        $stmt->bindParam(':password', $this->password);
+
+        return $stmt->execute();
     }
 
-    public function login($email, $password) {
-        $password_md5 = md5($password);
-        $stmt = $this->conn->prepare("SELECT * FROM customers WHERE email = :email AND password = :password");
-        $stmt->execute(['email' => $email, 'password' => $password_md5]);
+    // Leer todos los clientes
+    public function read() {
+        $query = "SELECT * FROM " . $this->table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // Leer un cliente por ID
+    public function readOne() {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = ? LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function register($name, $email, $password, $type = 'Basic') {
-        $password_md5 = md5($password);
-        $stmt = $this->conn->prepare("INSERT INTO customers (name, email, password, type) VALUES (:name, :email, :password, :type)");
-        return $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password_md5, 'type' => $type]);
+    // Actualizar un cliente
+    public function update() {
+        $query = "UPDATE " . $this->table . " 
+                  SET firstname = :firstname, surname = :surname, 
+                      email = :email, type = :type 
+                  WHERE id = :id";
+        
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':firstname', $this->firstname);
+        $stmt->bindParam(':surname', $this->surname);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':type', $this->type);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // Eliminar un cliente
+    public function delete() {
+        $query = "DELETE FROM " . $this->table . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        return $stmt->execute();
     }
 }
 ?>

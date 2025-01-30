@@ -1,30 +1,78 @@
 <?php
-// models/books.php
-class Books {
+class Book {
     private $conn;
+    private $table = 'book';
 
-    public function __construct($conn) {
-        $this->conn = $conn;
+    public $id;
+    public $isbn;
+    public $title;
+    public $author;
+    public $stock;
+    public $price;
+
+    public function __construct($db) {
+        $this->conn = $db;
     }
 
-    public function insert($title, $author, $price) {
-        $stmt = $this->conn->prepare("INSERT INTO books (title, author, price) VALUES (:title, :author, :price)");
-        return $stmt->execute(['title' => $title, 'author' => $author, 'price' => $price]);
+    // Crear un libro
+    public function create() {
+        $query = "INSERT INTO " . $this->table . " 
+                  SET isbn = :isbn, title = :title, author = :author, 
+                      stock = :stock, price = :price";
+        
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':isbn', $this->isbn);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':author', $this->author);
+        $stmt->bindParam(':stock', $this->stock);
+        $stmt->bindParam(':price', $this->price);
+
+        return $stmt->execute();
     }
 
-    public function getAll() {
-        $stmt = $this->conn->query("SELECT * FROM books");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Leer todos los libros
+    public function read() {
+        $query = "SELECT * FROM " . $this->table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
     }
 
-    public function update($id, $title, $author, $price) {
-        $stmt = $this->conn->prepare("UPDATE books SET title = :title, author = :author, price = :price WHERE id = :id");
-        return $stmt->execute(['id' => $id, 'title' => $title, 'author' => $author, 'price' => $price]);
+    // Leer un libro por ID
+    public function readOne() {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = ? LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function delete($id) {
-        $stmt = $this->conn->prepare("DELETE FROM books WHERE id = :id");
-        return $stmt->execute(['id' => $id]);
+    // Actualizar un libro
+    public function update() {
+        $query = "UPDATE " . $this->table . " 
+                  SET isbn = :isbn, title = :title, author = :author, 
+                      stock = :stock, price = :price 
+                  WHERE id = :id";
+        
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':isbn', $this->isbn);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':author', $this->author);
+        $stmt->bindParam(':stock', $this->stock);
+        $stmt->bindParam(':price', $this->price);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
+    // Eliminar un libro
+    public function delete() {
+        $query = "DELETE FROM " . $this->table . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        return $stmt->execute();
     }
 }
 ?>

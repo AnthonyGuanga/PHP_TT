@@ -1,42 +1,20 @@
 <?php
-// config/database.php
-require_once 'DBConnetion.php'; // Asegúrate de que la ruta sea correcta
-
 class Database {
-    private $connection;
-
-    public function __construct() {
-        $dbConnection = new DBConnetion('config/db_config.json'); // Ruta al archivo de configuración
-        $this->connection = $dbConnection->dbConnect();
-    }
+    private $host = 'localhost';
+    private $db_name = 'libros';
+    private $username = 'root';
+    private $password = '';
+    public $conn;
 
     public function getConnection() {
-        return $this->connection;
+        $this->conn = null;
+        try {
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            $this->conn->exec("set names utf8");
+        } catch(PDOException $exception) {
+            echo "Error de conexión: " . $exception->getMessage();
+        }
+        return $this->conn;
     }
-    
 }
-// if ($use_db) {
-//     // Crear tabla de clientes
-//     $query = $connection->prepare('
-//         CREATE TABLE IF NOT EXISTS customers (
-//             id INT AUTO_INCREMENT PRIMARY KEY,
-//             name VARCHAR(100) NOT NULL,
-//             email VARCHAR(100) NOT NULL UNIQUE,
-//             password VARCHAR(32) NOT NULL,
-//             type ENUM("Basic", "Premium") DEFAULT "Basic"
-//         )
-//     ');
-//     $query->execute();
-
-//     // Crear tabla de libros
-//     $query = $connection->prepare('
-//         CREATE TABLE IF NOT EXISTS books (
-//             id INT AUTO_INCREMENT PRIMARY KEY,
-//             title VARCHAR(100) NOT NULL,
-//             author VARCHAR(100) NOT NULL,
-//             price DECIMAL(10, 2) NOT NULL
-//         )
-//     ');
-//     $query->execute();
-// }
 ?>

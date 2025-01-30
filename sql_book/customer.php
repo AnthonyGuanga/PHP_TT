@@ -17,7 +17,15 @@ class customer{
         $this->password = $password;
         $this->type = $type;
     }
-
+    public function userId($id){
+            $connObj = new DBConnection();
+            $conn = $connObj->getConnection();
+            $sql = "SELECT * FROM customer WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(['id' => $id]);
+            $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+            return new self($customer["id"],$customer["firstname"],$customer["surname"],$customer["email"],$customer["password"],$customer["type"]);
+    }
     //Conprobar si el usuario existe en la base de datos 
     public function userExiste($firstname,$password){
           
@@ -36,8 +44,9 @@ class customer{
                 if($customer){
                     var_dump($customer);
                     return true;
-                }
-                
-}
-   
+                }            
+        }
+public function getBook() {
+
+    }
 }

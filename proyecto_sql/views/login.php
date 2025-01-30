@@ -1,7 +1,19 @@
-<!-- views/login.php -->
-<form action="../controllers/login_controller.php" method="POST">
-    <input type="email" name="email" placeholder="Correo electrónico" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit">Iniciar sesión</button>
-</form>
-<?php if (isset($_GET['error'])) echo "<p>Usuario o contraseña incorrectos</p>"; ?>
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <?php if(isset($_SESSION['error'])): ?>
+        <div style="color:red"><?= $_SESSION['error']; unset($_SESSION['error']); ?></div>
+    <?php endif; ?>
+    
+    <form action="controllers/AuthController.php" method="POST">
+        Email: <input type="email" name="email" required><br>
+        Contraseña: <input type="password" name="password" required><br>
+        <button type="submit">Ingresar</button>
+    </form>
+    <a href="register.php">Registrarse</a>
+</body>
+</html>
