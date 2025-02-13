@@ -1,12 +1,13 @@
 <?php
 
-require_once "DBConnection.php";
-require_once "customer.php";
-$db = new DBConnection();
-$con = new Customer();
-$connection = $db->getConnection();
+session_start();
+// require_once "DBConnection.php";
+// require_once "customer.php";
+// $db = new DBConnection();
+// $con = new Customer();
+// $connection = $db->getConnection();
 
-$db->createTablas();
+// $db->createTablas();
 
 // ctl k + c Para documentar el codigo
 
@@ -28,4 +29,9 @@ if($con->userExiste($email)){
     echo "El usuario no existe";
     } */
 
-header("Location: login.php");
+if(!isset($_SESSION["logedUser"])){
+    header("location:./login.php");
+}
+else {
+    header("location:main.php");
+}
