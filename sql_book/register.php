@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>welcome to the registry</h1>
-    <a href="login.php"><button>Go back to login</button></a>
+    <a href="./index"><button>Go back to login</button></a>
     <?php
     
     print("<form action=\"./validateRegister.php\ method=\"POST\">
