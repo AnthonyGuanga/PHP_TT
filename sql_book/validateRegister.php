@@ -5,7 +5,7 @@ require_once "./utils.php";
 if(!isset($_POST["firsname"])|!isset($_POST["surname"])|!isset($_POST["email"])|!isset($_POST["password"])|!isset($_POST["type"])){
     header("location:./register.php");
 }
-$customer= new Customer($_POST["email"],$_POST["password"],$_POST["type"],$_POST["firsname"],$_POST["surname"]);
+$customer= new customer($_POST["email"],$_POST["password"],$_POST["type"],$_POST["firsname"],$_POST["surname"]);
 
 if(addCustomer($customer)){
     echo "<h2>User created correctly, you will be redirected in 5 seconds</h2>";
